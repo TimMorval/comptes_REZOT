@@ -1,0 +1,52 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding: 20px;
+}
+
+.centered-container {
+    text-align: center;
+}
+
+.centered-title {
+    font-size: 36px; /* Set your font size here */
+    color: #333; /* Set your text color here */
+}
+
+
+.drop-zone {
+    border: 2px dashed #ccc;
+    border-radius: 10px;
+    padding: 20px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #f8f8f8;
+    transition: background-color 0.3s;
+}
+
+.drop-zone:hover {
+    background-color: #e0e0e0;
+}
+
+.file-list {
+    margin-top: 20px;
+    font-weight: bold;
+}
+
+.btn {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
