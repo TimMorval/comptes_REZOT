@@ -134,3 +134,6 @@ dist
 
 # pycache
 __pycache__
+
+# csv
+*.csv

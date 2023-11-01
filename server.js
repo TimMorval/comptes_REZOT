@@ -39,7 +39,7 @@ app.get("/process", (req, res) => {
   }
 
   const inputPath = path.join(__dirname, lastUploadedFile);
-  const outputPath = path.join(__dirname, "processed_" + lastUploadedFile);
+  const outputPath = path.join(__dirname, "processed_file.xlsx");
 
   const process = spawn("python", ["compte.py", inputPath, outputPath]);
 
