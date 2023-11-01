@@ -9,6 +9,3 @@ if not exist "node_modules\" (
 :: Lancer npm start
 echo Lancement de npm start...
 npm start
-
-:: Ouvrir le navigateur à l'adresse localhost:3000
-start http://localhost:3000

@@ -12,6 +12,8 @@ def process_file(input_name, output_name, save=True):
             return 'Railway'
         if re.search('google', text, re.IGNORECASE):
             return 'Google'
+        if re.search('FACEBK', text, re.IGNORECASE):
+            return 'FACEBOOK'
         if re.search('webflow', text, re.IGNORECASE):
             return 'Webflow'
         if re.search('SNCF', text, re.IGNORECASE):
