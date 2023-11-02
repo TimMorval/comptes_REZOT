@@ -41,7 +41,7 @@ app.get("/process", (req, res) => {
   const inputPath = path.join(__dirname, lastUploadedFile);
   const outputPath = path.join(__dirname, "processed_file.xlsx");
 
-  const process = spawn("python", ["compte.py", inputPath, outputPath]);
+  const process = spawn("python", ["compte_rezot.py", inputPath, outputPath]);
 
   process.stderr.on("data", (data) => {
     console.error(`Python STDERR: ${data}`);
