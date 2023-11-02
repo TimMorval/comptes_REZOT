@@ -7,6 +7,8 @@ document.addEventListener("DOMContentLoaded", function () {
   // Function to clear the file list
   function clearFileList() {
     fileList.innerHTML = "";
+    processButton.setAttribute("disabled", true);
+    cancelButton.setAttribute("disabled", true);
   }
 
   dropZone.addEventListener("dragover", function (event) {
@@ -49,17 +51,15 @@ document.addEventListener("DOMContentLoaded", function () {
         const a = document.createElement("a");
         a.style.display = "none";
         a.href = url;
-        a.download = "processed_file.csv"; // You can name this whatever you want
+        a.download = "processed_file.csv";
         document.body.appendChild(a);
         a.click();
         window.URL.revokeObjectURL(url);
+        clearFileList();
       });
   });
 
   cancelButton.addEventListener("click", function () {
-    clearFileList(); // Clear the file list
-    processButton.setAttribute("disabled", true);
-    cancelButton.setAttribute("disabled", true);
-    // You can also add code here to cancel the upload on the server if needed.
+    clearFileList();
   });
 });
