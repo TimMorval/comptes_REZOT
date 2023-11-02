@@ -1,9 +1,9 @@
 import pandas as pd
 import re
 import sys
+from bank_process_utils import drop_column, save_to_csv
 
-
-def process_file(input_name, output_name, save=True):
+def process_file(input_file, output_file):
 
     def search(text):
         pers_pattern = r'[POUR|DE]: (\w*) (\w*)'
@@ -41,7 +41,7 @@ def process_file(input_name, output_name, save=True):
         return 'Autre'
 
     def extract_for(data):
-        index = data[data['Date'].notna()].index
+        index = data[data.Date.notna()].index
         texts = data["Nature de l'opération"].tolist()
         result = []
         for i in range(len(index)):
@@ -56,9 +56,11 @@ def process_file(input_name, output_name, save=True):
     # Function to get main dataframe
 
     def get_data(data):
-        df = data[data['Date'].notna()][['Date', "Nature de l'opération",
-                                        "Débit", "Crédit", "Libellé interbancaire"]]
-        df[["Débit", "Crédit"]] = df[["Débit", "Crédit"]].fillna(0)
+        date_not_na = data.Date.notna()
+        df = drop_column(data[date_not_na], 'Devise')
+        df = drop_column(df, 'Date de valeur')
+        df["Débit"] = df.Débit.fillna("0").str.replace(' ', '')
+        df["Crédit"] = df.Crédit.fillna("0").str.replace(' ', '')
         df['POUR/DE'] = extract_for(data)
         return df.reset_index(drop=True)
 
@@ -72,18 +74,13 @@ def process_file(input_name, output_name, save=True):
         return df
 
     # Read the input CSV file
-    data = pd.read_csv(input_name, skiprows=6, delimiter=';')
+    data = pd.read_csv(input_file, skiprows=6, delimiter=';')
 
     # Process the data
     df = get_data(data)
     df = commission(df)
 
-    # Save the processed data to an Excel file
-    if save:
-        with pd.ExcelWriter(output_name, engine='openpyxl') as writer:
-            df.to_excel(writer, sheet_name='sheet', index=False)
-    else:
-        return df
+    save_to_csv(df, output_file, sep=';', encoding='ISO-8859-1')
 
 
 if __name__ == "__main__":

@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const a = document.createElement("a");
         a.style.display = "none";
         a.href = url;
-        a.download = "processed_file.xlsx"; // You can name this whatever you want
+        a.download = "processed_file.csv"; // You can name this whatever you want
         document.body.appendChild(a);
         a.click();
         window.URL.revokeObjectURL(url);
