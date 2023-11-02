@@ -16,34 +16,29 @@ app.get("/", (req, res) =>
 // Configure multer storage
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "./");
+    cb(null, "uploads/"); // Use an 'uploads' folder
   },
   filename: (req, file, cb) => {
-    cb(null, file.originalname);
+    cb(null, Date.now() + "-" + file.originalname); // Prefix with a timestamp to avoid overwriting
   },
 });
 
 const upload = multer({ storage: storage });
-let lastUploadedFile = "";
 
-// Handle file upload
+// Handle file upload and processing
 app.post("/upload", upload.single("file"), (req, res) => {
   if (!req.file) {
     return res.status(400).send("No file uploaded.");
   }
-  lastUploadedFile = req.file.originalname;
-  res.status(200).send("File uploaded successfully.");
-});
 
-// Add a button to trigger processing
-app.get("/process", (req, res) => {
-  if (!lastUploadedFile) {
-    return res.status(400).send("No file to process.");
-  }
+  // File path for both input and output
+  const inputPath = path.join(__dirname, req.file.path);
+  const outputPath = path.join(
+    __dirname,
+    "uploads/processed_" + req.file.originalname
+  );
 
-  const inputPath = path.join(__dirname, lastUploadedFile);
-  const outputPath = path.join(__dirname, "processed_file.csv");
-
+  // Spawn the Python process
   const process = spawn("python", [
     "./python/compte_rezot.py",
     inputPath,
@@ -55,22 +50,20 @@ app.get("/process", (req, res) => {
   });
 
   process.on("close", (code) => {
-    console.log(`Python script exited with code ${code}`);
     if (code !== 0) {
+      fs.unlinkSync(inputPath); // Clean up uploaded file
       return res.status(500).send("Failed to process file.");
     }
 
     // Send the processed file as a download
-    res.download(outputPath, path.basename(outputPath), (err) => {
+    res.download(outputPath, (err) => {
       if (err) {
-        console.log(`Error downloading file: ${err}`);
-        res.status(500).send("Could not download the file.");
-      } else {
-        // Delete the uploaded and processed files
-        fs.unlinkSync(inputPath);
-        fs.unlinkSync(outputPath);
-        lastUploadedFile = ""; // Reset the lastUploadedFile variable
+        console.error(`Error downloading file: ${err}`);
       }
+
+      // Clean up files after sending
+      fs.unlinkSync(inputPath);
+      fs.unlinkSync(outputPath);
     });
   });
 });

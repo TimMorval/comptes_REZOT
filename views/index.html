@@ -15,14 +15,13 @@
   <body>
     <div class="centered-container">
       <h1 class="centered-title">Accounting</h1>
+      <div class="file-selection">
+        <input type="file" id="file-input" accept=".csv" />
+      </div>
+      <div id="file-list" class="file-list"></div>
+      <button id="process-button" class="btn" disabled>Process</button>
+      <button id="cancel-button" class="btn" disabled>Cancel</button>
+      <script src="javascripts/script.js"></script>
     </div>
-    <div id="drop-zone" class="drop-zone">
-      <i class="fas fa-file-upload fa-5x"></i>
-      <p>Drop your file here</p>
-    </div>
-    <div id="file-list" class="file-list"></div>
-    <button id="process-button" class="btn" disabled>Process</button>
-    <button id="cancel-button" class="btn" disabled>Cancel</button>
-    <script src="javascripts/script.js"></script>
   </body>
 </html>
